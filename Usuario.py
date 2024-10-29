@@ -1,11 +1,11 @@
+# usuario.py
+
 class Usuario:
     def __init__(self, id, nombre, correo_electronico, contrasena):
         self._id = id
         self._nombre = nombre
         self._correo_electronico = correo_electronico
         self._contrasena = contrasena
-
-    # Propiedades para manejar los atributos de Usuario
 
     @property
     def id(self):
@@ -15,26 +15,23 @@ class Usuario:
     def nombre(self):
         return self._nombre
 
-    @nombre.setter
-    def nombre(self, nombre):
-        self._nombre = nombre
-
     @property
     def correo_electronico(self):
         return self._correo_electronico
 
-    @correo_electronico.setter
-    def correo_electronico(self, correo):
-        self._correo_electronico = correo
+class Cliente(Usuario):
+    def __init__(self, id, nombre, correo_electronico, contrasena):
+        super().__init__(id, nombre, correo_electronico, contrasena)
+        self.historial_compras = []
+        self.preferencias = {}
 
-    @property
-    def contrasena(self):
-        return self._contrasena
+    def agregar_a_historial(self, producto):
+        self.historial_compras.append(producto)
 
-    @contrasena.setter
-    def contrasena(self, contrasena):
-        self._contrasena = contrasena
+class Administrador(Usuario):
+    def __init__(self, id, nombre, correo_electronico, contrasena):
+        super().__init__(id, nombre, correo_electronico, contrasena)
 
-    # Método destructor opcional
-    def __del__(self):
-        print(f"El usuario {self._nombre} ha sido eliminado.")
+    def gestionar_inventario(self, inventario, producto, cantidad):
+        inventario.actualizar_inventario(producto, cantidad)
+
