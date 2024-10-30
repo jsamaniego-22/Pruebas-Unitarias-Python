@@ -1,35 +1,33 @@
+# Carrito.py
+
+from Producto import Producto  # Asegúrate de que la ruta y el nombre del archivo sean correctos
+
 class Carrito:
     def __init__(self):
-        self._productos = []  # Lista de productos en el carrito
-        self._total = 0.0     # Total del carrito
+        self._productos = []
+        self._total = 0.0
 
-    # Método para agregar productos al carrito
-    def agregar_producto(self, producto, cantidad=1):
-        if producto.stock >= cantidad:
+    # Sobrecarga simulada del método agregar_producto
+    def agregar_producto(self, producto=None, id=None, nombre=None, precio=None, cantidad=1, inventario=None):
+        if producto is not None:
+            # Agregar producto por objeto Producto
             self._productos.append((producto, cantidad))
-            producto.stock -= cantidad  # Reducir stock del producto
-            self.calcular_total()
-        else:
-            print("No hay suficiente stock para añadir este producto.")
+            producto.reducir_stock(cantidad)
+        elif id is not None and inventario is not None:
+            # Buscar y agregar producto por ID usando el inventario
+            prod = inventario.obtener_producto_por_id(id)
+            if prod:
+                self._productos.append((prod, cantidad))
+                prod.reducir_stock(cantidad)
+        elif nombre is not None and precio is not None:
+            # Agregar producto directamente por nombre y precio
+            self._productos.append((Producto(None, nombre, "", precio, 0), cantidad))
+        
+        self.calcular_total()
 
-    # Método para remover productos del carrito
-    def remover_producto(self, producto):
-        for p, cantidad in self._productos:
-            if p.id == producto.id:
-                self._productos.remove((p, cantidad))
-                p.stock += cantidad  # Devolver stock al inventario
-                self.calcular_total()
-                break
-
-    # Método para calcular el total del carrito
     def calcular_total(self):
         self._total = sum(producto.precio * cantidad for producto, cantidad in self._productos)
 
-    @property
-    def total(self):
-        return self._total
-
-    # Método para mostrar productos en el carrito
     def mostrar_carrito(self):
         for producto, cantidad in self._productos:
             print(f"{producto.nombre} - Cantidad: {cantidad} - Precio Total: {producto.precio * cantidad}")
