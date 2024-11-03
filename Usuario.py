@@ -1,10 +1,12 @@
 # usuario.py
 
+import re
+
 class Usuario:
     def __init__(self, id, nombre, correo_electronico, contrasena):
         self._id = id
         self._nombre = nombre
-        self._correo_electronico = correo_electronico
+        self.correo_electronico = correo_electronico  # Usa el setter para validación
         self._contrasena = contrasena
 
     @property
@@ -15,9 +17,35 @@ class Usuario:
     def nombre(self):
         return self._nombre
 
+    @nombre.setter
+    def nombre(self, nombre):
+        if isinstance(nombre, str) and nombre.strip():
+            self._nombre = nombre
+        else:
+            raise ValueError("Nombre no puede estar vacío")
+
     @property
     def correo_electronico(self):
         return self._correo_electronico
+
+    @correo_electronico.setter
+    def correo_electronico(self, correo):
+        if re.match(r"[^@]+@[^@]+\.[^@]+", correo):
+            self._correo_electronico = correo
+        else:
+            raise ValueError("Correo electrónico no válido")
+
+    @property
+    def contrasena(self):
+        return self._contrasena
+
+    @contrasena.setter
+    def contrasena(self, contrasena):
+        if len(contrasena) >= 6:
+            self._contrasena = contrasena
+        else:
+            raise ValueError("La contraseña debe tener al menos 6 caracteres")
+
 
 class Cliente(Usuario):
     def __init__(self, id, nombre, correo_electronico, contrasena):
