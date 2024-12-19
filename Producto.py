@@ -1,5 +1,5 @@
 # producto.py
-
+from excepciones import InventarioInsuficienteExcepcion
 from item import Item
 
 class Producto(Item):
@@ -19,7 +19,7 @@ class Producto(Item):
             self._stock = stock
         else:
             raise ValueError("El stock no puede ser negativo")
-
+    
     # Accesor y mutador para descripción
     @property
     def descripcion(self):
@@ -35,7 +35,7 @@ class Producto(Item):
     # Método para reducir el stock
     def reducir_stock(self, cantidad):
         if cantidad > self._stock:
-            print("Stock insuficiente para reducir")
+            raise InventarioInsuficienteExcepcion(f"No hay suficiente stock para reducir {cantidad}. Stock actual: {self._stock}")
         else:
             self._stock -= cantidad
             print(f"Stock de {self._nombre} reducido en {cantidad}. Stock actual: {self._stock}")
